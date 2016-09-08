@@ -20,12 +20,14 @@ def home(request):
                 firstN = request.POST['first_name']
                 lastN = request.POST['last_name']
                 IBN = request.POST['iban']
+                user = request.user.username
+                print (user)
                 print("First Name : "  + firstN)
                 print("Last Name : " + lastN)
                 print("IBAN : " + IBN)
-                if ((userdata.objects.filter(first_name=firstN,last_name=lastN, iban=IBN).count()== 0) and
-                    (userdata.objects.filter(iban=IBN).count()== 0)):
-                    UserToAdd = userdata.objects.create(first_name=firstN,last_name=lastN, iban=IBN)
+                if ((userdata.objects.filter(owner=request.user.username,first_name=firstN,last_name=lastN, iban=IBN).count()== 0) and
+                    (userdata.objects.filter(owner=request.user.username,iban=IBN).count()== 0)):
+                    UserToAdd = userdata.objects.create(owner=request.user.username,first_name=firstN,last_name=lastN, iban=IBN)
                     UserToAdd.save()
                     context = {'user': request.user, 'formC': Createform, 'formR': Readform, 'formD': Delteform,
                    'Created': "Record Created Successfully"}
@@ -40,9 +42,10 @@ def home(request):
             form = UserReadForm(request.POST)
             if form.is_valid():
                 LastRN = request.POST['last_name']
+                user = request.user.username
                 print("last Name : "  + LastRN)
-                if userdata.objects.filter(last_name=LastRN).count()>0:
-                    readusers = userdata.objects.filter(last_name=LastRN)
+                if userdata.objects.filter(owner=request.user.username,last_name=LastRN).count()>0:
+                    readusers = userdata.objects.filter(owner=request.user.username,last_name=LastRN)
                     query_data = {
                         "query_details": readusers
                     }
@@ -59,8 +62,9 @@ def home(request):
             form = UserDeleteForm(request.POST)
             if form.is_valid():
                 IBND = request.POST['iban']
+                user = request.user.username
                 print ("Deleted" )
-                if userdata.objects.filter(iban=IBND).count()>0:
+                if userdata.objects.filter(owner=user,iban=IBND).count()>0:
                     UdataToDelete = userdata.objects.filter(iban=IBND)
                     UdataToDelete.delete()
                     context = {'user': request.user, 'formC': Createform, 'formR': Readform, 'formD': Delteform,
@@ -82,9 +86,10 @@ def home(request):
                 NewfirstN = request.POST['Newfname']
                 NewlastN = request.POST['Newlname']
                 NewIBAN = request.POST['Newiban']
+                user = request.user.username
                 print("Updated")
-                if (userdata.objects.filter(first_name=firstCN, last_name=lastCN, iban=IBANCR).count()>0):
-                    userdata.objects.filter(first_name=firstCN, last_name=lastCN, iban=IBANCR).update(
+                if (userdata.objects.filter(owner=request.user.username,first_name=firstCN, last_name=lastCN, iban=IBANCR).count()>0):
+                    userdata.objects.filter(owner=request.user.username,first_name=firstCN, last_name=lastCN, iban=IBANCR).update(
                         first_name=NewfirstN, last_name=NewlastN, iban=NewIBAN)
                     context = {'user': request.user, 'formC':Createform, 'formR':Readform, 'formD': Delteform , 'UPDATE': "Updated Successfully"}
                     return render(request, 'home.html', context)
