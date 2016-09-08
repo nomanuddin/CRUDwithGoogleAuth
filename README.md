@@ -19,7 +19,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API = True<br><br>
 SOCIAL_AUTH_GOOGLE_PLUS_USE_DEPRECATED_API = True<br><br>
 Step 7. makemigrations command is used in the end for applying all the changes.<br><br>
 
-#####
+#####=======================================================
 #####Following details are for CRUD functionality.
 #####=======================================================
 1. forms are created for user creation and reading functionality.
