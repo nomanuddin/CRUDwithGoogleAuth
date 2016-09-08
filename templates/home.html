@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block main %}
+ <div>
+ <h1>User Administration</h1>
+ <p>
+   <ul>
+   {% if user and not user.is_anonymous %}
+     <li>
+       <a>Hello {{ user.get_full_name|default:user.username }}!</a>
+     </li>
+     <li>
+       <a href="{% url 'auth:logout' %}?next={{ request.path }}">Logout</a>
+     <br/>
+     <br/>
+     <br/>
+     </li>
+       ============================
+       <h2>Store Users Data</h2>
+       ============================
+       <form method='post' action=''>{% csrf_token %}
+           {{ formC.as_p }}
+       <input type="submit" name = "operation" value="Create"> {{ ErrorCreate }}
+       </form>
+       {{ Created }}
+       <br><br>
+       ============================
+       <h2>Read Users Data</h2>
+       ============================
+       <form method='post' action=''>{% csrf_token %}
+           {{ formR.as_p }}
+       <input type="submit" name = "operation" value="Read">
+       </form>
+
+       {% for data in UserRead %}
+           ============================<br>
+           First Name : <b>{{ data.first_name }}</b><br>
+           Last Name :<b> {{ data.last_name }}</b><br>
+           Iban : <b>{{ data.iban }}</b><br>
+
+       {% endfor %}
+      {{ UserReadF }}
+       <br>
+       <br>
+
+
+
+       ============================
+       <h2>Update Users</h2>
+       ============================
+       <form method='post' action=''>{% csrf_token %}
+           {{ formC.as_p }}
+            New First Name : <input type="text" name="Newfname" value=""><br>
+            New Last Name : <input type="text" name="Newlname" value=""><br>
+            New Iban Name : <input type="text" name="Newiban" value=""><br>
+       <input type="submit" name = "operation" value="Update">
+       </form>
+       {{ UPDATE }}
+       <br>
+       <br>
+       ============================
+       <h2>Delete Users</h2>
+       ============================
+
+       <form method='post' action=''>{% csrf_token %}
+           {{ formD.as_p }}
+       <input type="submit" name = "operation" value="Delete">
+       </form>
+       {{ DELETED }}
+
+
+
+   {% else %}`
+     <li>
+       <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with Google</a>
+     </li>
+
+   {% endif %}
+   </ul>
+ </p>
+ </div>
+{% endblock %}
