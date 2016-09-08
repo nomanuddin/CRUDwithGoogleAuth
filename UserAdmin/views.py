@@ -64,7 +64,7 @@ def home(request):
                 IBND = request.POST['iban']
                 user = request.user.username
                 print ("Deleted" )
-                if userdata.objects.filter(owner=user,iban=IBND).count()>0:
+                if userdata.objects.filter(owner=request.user.username,iban=IBND).count()>0:
                     UdataToDelete = userdata.objects.filter(iban=IBND)
                     UdataToDelete.delete()
                     context = {'user': request.user, 'formC': Createform, 'formR': Readform, 'formD': Delteform,
